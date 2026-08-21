@@ -62,7 +62,7 @@
         .google-bar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             padding: 1rem 2rem;
             background: var(--white);
             border-bottom: var(--border-thick);
@@ -74,6 +74,8 @@
         }
 
         .logo {
+            position: absolute;
+            left: 2rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -450,8 +452,12 @@
         @media (max-width: 768px) {
             .google-bar {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: center;
                 padding: 1rem;
+            }
+            .logo {
+                position: static;
+                margin-bottom: 1rem;
             }
             .search-container {
                 max-width: 100%;
@@ -505,23 +511,11 @@
             <input type="text" placeholder="Search MoonClear index..." aria-label="Search">
             <button type="button">SEARCH</button>
         </div>
-        <div class="top-links">
-            <a href="#torrents">Torrents</a>
-            <a href="#streaming">Streaming</a>
-            <a href="#direct">Direct</a>
-            <a href="#software">Software</a>
-            <a href="#books">Books</a>
-            <a href="#about">About</a>
-        </div>
     </header>
 
     <section class="hero">
         <h1>MEGA INDEX</h1>
         <p id="site-count" style="font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;"></p>
-        <div class="search-actions">
-            <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" target="_blank" rel="noopener noreferrer" class="brutal-btn primary">REDDIT MEGATHREAD</a>
-            <a href="https://fmhy.net" target="_blank" rel="noopener noreferrer" class="brutal-btn">FMHY SITE</a>
-        </div>
     </section>
 
     <nav class="main-nav">
