@@ -113,6 +113,35 @@
             fill: var(--white);
         }
 
+        .github-link {
+            position: absolute;
+            right: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: var(--border-thin);
+            background: var(--white);
+            color: var(--black);
+            text-decoration: none;
+            transition: var(--transition);
+            border-radius: var(--radius-sm);
+        }
+
+        .github-link:hover {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-brutal-sm);
+        }
+
+        .github-link svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: currentColor;
+        }
+
         .search-container {
             flex: 1;
             max-width: 640px;
