@@ -1,3 +1,5 @@
+[![No AI](https://raw.githubusercontent.com/nuxy/no-ai-badge/master/badge.svg)](https://github.com/nuxy/no-ai-badge)
+
 What is here
 - Torrents and tracker indexes
 - Streaming sites for movies and TV
