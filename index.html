@@ -1,660 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoonClear</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
-    <style>
-        :root {
-            --black: #000000;
-            --white: #ffffff;
-            --yellow: #ffde00;
-            --red: #ff3b3b;
-            --blue: #1a73e8;
-            --green: #0f9d58;
-            --orange: #ff6d00;
-            --purple: #7c4dff;
-            --gray: #f8f9fa;
-            --dark-gray: #202124;
-            --border-thick: 3px solid var(--black);
-            --border-thin: 2px solid var(--black);
-            --shadow-brutal: 6px 6px 0px 0px var(--black);
-            --shadow-brutal-sm: 3px 3px 0px 0px var(--black);
-            --shadow-brutal-lg: 10px 10px 0px 0px var(--black);
-            --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.12);
-            --shadow-soft-lg: 0 4px 16px rgba(0, 0, 0, 0.16);
-            --font-mono: 'Courier New', 'IBM Plex Mono', monospace;
-            --font-sans: 'Arial', 'Helvetica Neue', sans-serif;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --radius: 8px;
-            --radius-sm: 4px;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            font-family: var(--font-sans);
-            color: var(--dark-gray);
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
-        }
-
-        .google-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.25rem 2rem;
-            background: var(--white);
-            border-bottom: var(--border-thick);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 1.25rem;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .logo {
-            position: absolute;
-            left: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: var(--black);
-            font-weight: 900;
-            font-size: 1.75rem;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-            transition: var(--transition);
-            padding: 0.4rem 0.75rem;
-            border-radius: var(--radius-sm);
-        }
-
-        .logo:hover {
-            background: var(--black);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-brutal-sm);
-        }
-
-        .logo svg {
-            width: 2rem;
-            height: 2rem;
-            fill: var(--black);
-            transition: var(--transition);
-        }
-
-        .logo:hover svg {
-            fill: var(--white);
-        }
-
-        .github-link {
-            position: absolute;
-            right: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border: var(--border-thin);
-            background: var(--white);
-            color: var(--black);
-            text-decoration: none;
-            transition: var(--transition);
-            border-radius: var(--radius-sm);
-        }
-
-        .github-link:hover {
-            background: var(--black);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-brutal-sm);
-        }
-
-        .github-link svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            fill: currentColor;
-        }
-
-        .search-container {
-            flex: 1;
-            max-width: 640px;
-            min-width: 240px;
-            display: flex;
-            border: var(--border-thick);
-            background: var(--white);
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .search-container:focus-within {
-            box-shadow: var(--shadow-soft-lg);
-            transform: translateY(-1px);
-            border-color: var(--blue);
-        }
-
-        .search-container input {
-            flex: 1;
-            padding: 0.85rem 1.25rem;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            font-family: var(--font-mono);
-            background: transparent;
-            color: var(--black);
-            font-weight: 600;
-        }
-
-        .search-container button {
-            background: var(--black);
-            color: var(--white);
-            border: none;
-            padding: 0 1.75rem;
-            font-weight: 700;
-            font-family: var(--font-sans);
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            transition: var(--transition);
-            font-size: 0.85rem;
-        }
-
-        .search-container button:hover {
-            background: var(--blue);
-            color: var(--white);
-        }
-
-        .top-links {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .top-links a {
-            color: var(--black);
-            text-decoration: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.1em;
-            padding: 0.3rem 0.6rem;
-            border: var(--border-thin);
-            background: var(--white);
-            transition: var(--transition);
-        }
-
-        .top-links a:hover {
-            background: var(--yellow);
-            box-shadow: var(--shadow-brutal-sm);
-            transform: translate(-2px, -2px);
-        }
-
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--white);
-            border-bottom: var(--border-thick);
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            color: var(--black);
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            font-weight: 400;
-            max-width: 700px;
-            margin: 0 auto;
-            color: #5f6368;
-            line-height: 1.6;
-        }
-
-        .search-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
-        }
-
-        .brutal-btn {
-            background: var(--white);
-            border: var(--border-thick);
-            padding: 0.85rem 1.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-family: var(--font-sans);
-            cursor: pointer;
-            box-shadow: var(--shadow-brutal-sm);
-            transition: var(--transition);
-            text-decoration: none;
-            color: var(--black);
-            display: inline-block;
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-            border-radius: var(--radius-sm);
-        }
-
-        .brutal-btn:hover {
-            box-shadow: var(--shadow-brutal);
-            transform: translateY(-3px);
-            background: var(--yellow);
-            border-color: var(--black);
-        }
-
-        .brutal-btn.primary {
-            background: var(--black);
-            color: var(--white);
-            border-color: var(--black);
-        }
-
-        .brutal-btn.primary:hover {
-            background: var(--blue);
-            color: var(--white);
-            transform: translateY(-3px);
-        }
-
-        .main-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            padding: 1.25rem 2rem;
-            background: var(--white);
-            border-bottom: var(--border-thick);
-            justify-content: center;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .main-nav a {
-            text-decoration: none;
-            color: var(--black);
-            font-weight: 700;
-            padding: 0.6rem 1.25rem;
-            border: var(--border-thin);
-            background: var(--white);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.06em;
-            transition: var(--transition);
-            border-radius: var(--radius-sm);
-            position: relative;
-        }
-
-        .main-nav a:hover {
-            background: var(--black);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-brutal-sm);
-        }
-
-        .content {
-            padding: 4rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2.25rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-            border-bottom: var(--border-thick);
-            padding-bottom: 0.75rem;
-            letter-spacing: -0.02em;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--black);
-        }
-
-        .section-title span {
-            background: var(--black);
-            color: var(--white);
-            padding: 0.3rem 0.75rem;
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-            border-radius: var(--radius-sm);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 5rem;
-        }
-
-        .card {
-            background: var(--white);
-            border: var(--border-thick);
-            box-shadow: var(--shadow-brutal);
-            padding: 1.75rem;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-height: 0;
-            border-radius: var(--radius);
-            position: relative;
-            border-top: 6px solid var(--black);
-        }
-
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-brutal-lg);
-            border-color: var(--black);
-            border-top-color: var(--blue);
-        }
-
-        .card .category-tag {
-            display: inline-block;
-            background: var(--yellow);
-            padding: 0.25rem 0.6rem;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border: var(--border-thin);
-            margin-bottom: 1rem;
-            width: fit-content;
-            max-width: 100%;
-            overflow-wrap: anywhere;
-            border-radius: var(--radius-sm);
-        }
-
-        .card h3 {
-            font-size: 1.35rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -0.01em;
-            margin-bottom: 0.6rem;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            line-height: 1.25;
-            color: var(--black);
-        }
-
-        .card .url {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--blue);
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 0.75rem;
-            word-break: break-all;
-            overflow-wrap: anywhere;
-            border-bottom: 2px solid transparent;
-            transition: var(--transition);
-            max-width: 100%;
-            padding-bottom: 2px;
-        }
-
-        .card .url:hover {
-            border-bottom: 2px solid var(--blue);
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #5f6368;
-            flex-grow: 1;
-            margin-bottom: 1.25rem;
-            overflow-wrap: break-word;
-            word-break: break-word;
-            line-height: 1.6;
-        }
-
-        .card .visit-btn {
-            background: var(--black);
-            color: var(--white);
-            text-decoration: none;
-            padding: 0.6rem 1.25rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            text-align: center;
-            border: var(--border-thin);
-            transition: var(--transition);
-            align-self: flex-start;
-            cursor: pointer;
-            display: inline-block;
-            border-radius: var(--radius-sm);
-            letter-spacing: 0.05em;
-        }
-
-        .card .visit-btn:hover {
-            background: var(--blue);
-            color: var(--white);
-            box-shadow: var(--shadow-brutal-sm);
-            transform: translateY(-2px);
-        }
-
-        .card .copy-btn {
-            background: var(--white);
-            color: var(--black);
-            text-decoration: none;
-            padding: 0.6rem 1.25rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            text-align: center;
-            border: var(--border-thin);
-            transition: var(--transition);
-            align-self: flex-start;
-            cursor: pointer;
-            display: inline-block;
-            margin-left: 0.5rem;
-            border-radius: var(--radius-sm);
-            letter-spacing: 0.05em;
-        }
-
-        .card .copy-btn:hover {
-            background: var(--green);
-            color: var(--white);
-            box-shadow: var(--shadow-brutal-sm);
-            transform: translateY(-2px);
-        }
-
-        .card .copy-btn.copied {
-            background: var(--green);
-            color: var(--white);
-        }
-
-        .card-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 0.75rem;
-        }
-
-        .card-buttons .visit-btn,
-        .card-buttons .copy-btn {
-            margin-left: 0;
-            flex-shrink: 0;
-        }
-
-        .footer {
-            background: var(--black);
-            color: var(--white);
-            padding: 3rem 2rem;
-            border-top: var(--border-thick);
-            text-align: center;
-            font-family: var(--font-mono);
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            font-size: 0.85rem;
-        }
-
-        .footer a {
-            color: var(--yellow);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer a:hover {
-            color: var(--white);
-            text-decoration: underline;
-        }
-
-        .disclaimer {
-            max-width: 800px;
-            margin: 1rem auto 0;
-            font-size: 0.8rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            color: #9aa0a6;
-        }
-
-        @media (max-width: 768px) {
-            .google-bar {
-                flex-direction: column;
-                align-items: center;
-                padding: 1rem;
-            }
-            .logo {
-                position: static;
-                margin-bottom: 1rem;
-            }
-            .search-container {
-                max-width: 100%;
-            }
-            .hero h1 {
-                font-size: 2.25rem;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .section-title {
-                font-size: 1.75rem;
-            }
-            #back-to-top {
-                bottom: 1rem;
-                right: 1rem;
-                padding: 0.6rem 1.25rem !important;
-                font-size: 0.85rem !important;
-                border-radius: var(--radius) !important;
-            }
-        }
-
-        #back-to-top {
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-soft-lg);
-            font-weight: 700;
-            letter-spacing: 0.08em;
-        }
-
-        #back-to-top:hover {
-            box-shadow: var(--shadow-brutal);
-            transform: translateY(-3px);
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .no-results {
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        mark {
-            background: var(--yellow);
-            padding: 0 2px;
-        }
-
-        .card.hidden {
-            display: none;
-        }
-    </style>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <canvas id="flickering-grid"></canvas>
 
     <header class="google-bar">
-        <a href="#" class="logo">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-            MoonClear
-        </a>
-        <div class="search-container">
-            <input type="text" placeholder="Search MoonClear index..." aria-label="Search">
-            <button type="button">SEARCH</button>
+        <div class="logo-row">
+            <a href="#" class="logo">
+                <span class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                </span>
+                <span>MoonClear</span>
+                <span class="logo-badge">INDEX</span>
+            </a>
         </div>
-        <a href="https://github.com/44tl/MoonClear" class="github-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-        </a>
+        <div class="search-container">
+            <div class="search-icon-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <input type="text" id="main-search" placeholder="Search verified indexes, tools, trackers, games..."
+                aria-label="Search">
+            <span class="search-shortcut">CTRL+K</span>
+            <button type="button" class="search-clear-btn" id="search-clear" aria-label="Clear search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="header-actions">
+            <a href="https://github.com/44tl/MoonClear" class="header-btn" target="_blank" rel="noopener noreferrer"
+                aria-label="GitHub Repository">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                <span>GITHUB</span>
+            </a>
+        </div>
     </header>
 
     <section class="hero">
-        <h1>MEGA INDEX</h1>
-        <p id="site-count" style="font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;"></p>
+        <h1>THE MEGA <span class="accent-g">INDEX</span></h1>
+        <p>A fast, ad-free directory of premier digital resources, open-source repositories, and privacy tools.</p>
+        <div class="stats-bar">
+            <span>TOTAL SITES: <strong id="site-count">Loading...</strong></span>
+            <span>•</span>
+            <span>SECTIONS: <strong>9 CATEGORIES</strong></span>
+            <span>•</span>
+            <span>ZERO ADS</span>
+        </div>
     </section>
 
-    <nav class="main-nav">
-        <a href="#torrents">Torrents</a>
-        <a href="#streaming">Streaming</a>
-        <a href="#direct-download">Direct Download</a>
-        <a href="#software">Software</a>
-        <a href="#games">Games</a>
-        <a href="#books">Books</a>
-        <a href="#anime">Anime</a>
-        <a href="#music">Music</a>
-        <a href="#tools">Tools</a>
+    <nav class="main-nav" aria-label="Category filter">
+        <a href="#torrents" class="filter-chip">Torrents</a>
+        <a href="#streaming" class="filter-chip">Streaming</a>
+        <a href="#direct-download" class="filter-chip">Direct Download</a>
+        <a href="#software" class="filter-chip">Software</a>
+        <a href="#games" class="filter-chip">Games</a>
+        <a href="#books" class="filter-chip">Books</a>
+        <a href="#anime" class="filter-chip">Anime</a>
+        <a href="#music" class="filter-chip">Music</a>
+        <a href="#tools" class="filter-chip">Tools & VPNs</a>
     </nav>
 
     <main class="content">
-
         <div id="torrents" class="section-title">
-            <span>01</span> Torrents & Tracker Indexes
+            <div class="section-title-left">
+                <span class="section-badge">01</span>
+                <span>Torrents & Trackers</span>
+            </div>
+            <span class="section-count">13 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
                 <span class="category-tag">Torrents</span>
                 <h3>The Pirate Bay</h3>
-                <a href="https://thepiratebay.org" class="url" target="_blank" rel="noopener noreferrer">thepiratebay.org</a>
-                <p>The most resilient torrent index. Official domain, but may require mirrors. Use official proxies listed on their site.</p>
+                <a href="https://thepiratebay.org" class="url" target="_blank"
+                    rel="noopener noreferrer">thepiratebay.org</a>
+                <p>The most resilient torrent index. Official domain, but may require mirrors. Use official proxies
+                    listed on their site.</p>
                 <a href="https://thepiratebay.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
@@ -670,13 +116,6 @@
                 <a href="https://rarbg.to" class="url" target="_blank" rel="noopener noreferrer">rarbg.to</a>
                 <p>High-quality movie and TV releases. Often blocked by ISPs, use VPN or mirrors listed on FMHY.</p>
                 <a href="https://rarbg.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
-            </div>
-            <div class="card">
-                <span class="category-tag">Torrents</span>
-                <h3>TorrentGalaxy</h3>
-                <a href="https://torrentgalaxy.to" class="url" target="_blank" rel="noopener noreferrer">torrentgalaxy.to</a>
-                <p>Modern torrent site with wide variety and active community.</p>
-                <a href="https://torrentgalaxy.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Torrents / Movies</span>
@@ -709,16 +148,20 @@
             <div class="card">
                 <span class="category-tag">Torrents</span>
                 <h3>LimeTorrents</h3>
-                <a href="https://www.limetorrents.cc" class="url" target="_blank" rel="noopener noreferrer">limetorrents.cc</a>
+                <a href="https://www.limetorrents.cc" class="url" target="_blank"
+                    rel="noopener noreferrer">limetorrents.cc</a>
                 <p>General torrent index with verified uploaders. Clean layout, healthy seeder counts.</p>
-                <a href="https://www.limetorrents.cc" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://www.limetorrents.cc" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Torrents</span>
                 <h3>TorrentDownloads</h3>
-                <a href="https://www.torrentdownloads.pro" class="url" target="_blank" rel="noopener noreferrer">torrentdownloads.pro</a>
+                <a href="https://www.torrentdownloads.pro" class="url" target="_blank"
+                    rel="noopener noreferrer">torrentdownloads.pro</a>
                 <p>Long-running torrent site with a large archive. Use a VPN if blocked.</p>
-                <a href="https://www.torrentdownloads.pro" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://www.torrentdownloads.pro" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Torrents</span>
@@ -727,80 +170,95 @@
                 <p>Torrent search engine that aggregates results from multiple indexes. No registration needed.</p>
                 <a href="https://torrentz2.nz" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
+            <div class="card">
+                <span class="category-tag">Torrents / Meta Search</span>
+                <h3>Knaben</h3>
+                <a href="https://knaben.org" class="url" target="_blank" rel="noopener noreferrer">knaben.org</a>
+                <p>Clean meta-search that queries dozens of trackers live in one search. No ads, open API, onion mirror
+                    available.</p>
+                <a href="https://knaben.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents / DHT Search</span>
+                <h3>BTDig</h3>
+                <a href="https://btdig.com" class="url" target="_blank" rel="noopener noreferrer">btdig.com</a>
+                <p>Full-text search over the DHT network. Finds torrents other indexes miss, straight from active
+                    swarms.</p>
+                <a href="https://btdig.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents</span>
+                <h3>Torlock</h3>
+                <a href="https://www.torlock.com" class="url" target="_blank" rel="noopener noreferrer">torlock.com</a>
+                <p>Fake-free focus: pays $1 for every fake torrent reported. Strong for music, ebooks, and anime.</p>
+                <a href="https://www.torlock.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
         </div>
 
         <div id="streaming" class="section-title">
-            <span>02</span> Streaming Sites (Movies/TV)
+            <div class="section-title-left">
+                <span class="section-badge">02</span>
+                <span>Streaming & Legal Cinema</span>
+            </div>
+            <span class="section-count">4 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
-                <span class="category-tag">Streaming</span>
-                <h3>FMovies</h3>
-                <a href="https://fmovies.to" class="url" target="_blank" rel="noopener noreferrer">fmovies.to</a>
-                <p>Large library with HD streams. Official domain may change; check FMHY for current mirror.</p>
-                <a href="https://fmovies.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Streaming / Legal</span>
+                <h3>Tubi</h3>
+                <a href="https://tubitv.com" class="url" target="_blank" rel="noopener noreferrer">tubitv.com</a>
+                <p>Fox-owned, 100% free with ads. Huge movie and TV library, no account required. Also strong for anime.
+                </p>
+                <a href="https://tubitv.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Streaming</span>
-                <h3>Soap2Day</h3>
-                <a href="https://soap2day.to" class="url" target="_blank" rel="noopener noreferrer">soap2day.to</a>
-                <p>Clean UI, no ads, multiple servers. Official domain soap2day.to.</p>
-                <a href="https://soap2day.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Streaming / Legal</span>
+                <h3>Pluto TV</h3>
+                <a href="https://pluto.tv" class="url" target="_blank" rel="noopener noreferrer">pluto.tv</a>
+                <p>Paramount-owned free live TV channels plus on-demand movies. No account, no fees, ever.</p>
+                <a href="https://pluto.tv" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Streaming</span>
-                <h3>LookMovie</h3>
-                <a href="https://lookmovie2.to" class="url" target="_blank" rel="noopener noreferrer">lookmovie2.to</a>
-                <p>High-quality 1080p streams with minimal ads.</p>
-                <a href="https://lookmovie2.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Streaming / Legal</span>
+                <h3>Plex</h3>
+                <a href="https://watch.plex.tv" class="url" target="_blank" rel="noopener noreferrer">watch.plex.tv</a>
+                <p>Free ad-supported movies, shows, and live TV channels worldwide. Free account only.</p>
+                <a href="https://watch.plex.tv" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Streaming</span>
-                <h3>Cineb</h3>
-                <a href="https://cineb.net" class="url" target="_blank" rel="noopener noreferrer">cineb.net</a>
-                <p>Netflix-like interface, fast streams.</p>
-                <a href="https://cineb.net" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
-            </div>
-            <div class="card">
-                <span class="category-tag">Streaming / Anime</span>
-                <h3>9anime</h3>
-                <a href="https://9anime.to" class="url" target="_blank" rel="noopener noreferrer">9anime.to</a>
-                <p>Anime streaming with English subs. Official domain 9anime.to (may redirect).</p>
-                <a href="https://9anime.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
-            </div>
-            <div class="card">
-                <span class="category-tag">Streaming / Anime</span>
-                <h3>Aniwatch</h3>
-                <a href="https://aniwatch.to" class="url" target="_blank" rel="noopener noreferrer">aniwatch.to</a>
-                <p>Modern anime streaming with high quality and no ads.</p>
-                <a href="https://aniwatch.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
-            </div>
-            <div class="card">
-                <span class="category-tag">Streaming / Anime</span>
-                <h3>Hianime</h3>
-                <a href="https://hianime.to" class="url" target="_blank" rel="noopener noreferrer">hianime.to</a>
-                <p>Popular anime streaming with large library and fast servers.</p>
-                <a href="https://hianime.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Streaming / Legal</span>
+                <h3>Kanopy</h3>
+                <a href="https://www.kanopy.com" class="url" target="_blank" rel="noopener noreferrer">kanopy.com</a>
+                <p>Prestige films, documentaries, and classics, free with a public library card. No ads.</p>
+                <a href="https://www.kanopy.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
         </div>
 
         <div id="direct-download" class="section-title">
-            <span>03</span> Direct Download (DDL)
+            <div class="section-title-left">
+                <span class="section-badge">03</span>
+                <span>Direct Download (DDL)</span>
+            </div>
+            <span class="section-count">10 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
                 <span class="category-tag">DDL / Games</span>
                 <h3>FitGirl Repacks</h3>
-                <a href="https://fitgirl-repacks.site" class="url" target="_blank" rel="noopener noreferrer">fitgirl-repacks.site</a>
+                <a href="https://fitgirl-repacks.site" class="url" target="_blank"
+                    rel="noopener noreferrer">fitgirl-repacks.site</a>
                 <p>Highly compressed game repacks. Official site, no ads, trusted repacker.</p>
-                <a href="https://fitgirl-repacks.site" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://fitgirl-repacks.site" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">DDL / Games</span>
                 <h3>DODI Repacks</h3>
-                <a href="https://dodi-repacks.site" class="url" target="_blank" rel="noopener noreferrer">dodi-repacks.site</a>
+                <a href="https://dodi-repacks.site" class="url" target="_blank"
+                    rel="noopener noreferrer">dodi-repacks.site</a>
                 <p>Another reliable repacker with faster installs, direct links.</p>
-                <a href="https://dodi-repacks.site" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://dodi-repacks.site" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">DDL / Games</span>
@@ -847,7 +305,8 @@
             <div class="card">
                 <span class="category-tag">DDL / Movies</span>
                 <h3>mkvCinemas</h3>
-                <a href="https://mkvcinemas.tel" class="url" target="_blank" rel="noopener noreferrer">mkvcinemas.tel</a>
+                <a href="https://mkvcinemas.tel" class="url" target="_blank"
+                    rel="noopener noreferrer">mkvcinemas.tel</a>
                 <p>Direct download and streaming for movies in various qualities. Updated frequently.</p>
                 <a href="https://mkvcinemas.tel" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
@@ -861,7 +320,11 @@
         </div>
 
         <div id="software" class="section-title">
-            <span>04</span> Software & Apps
+            <div class="section-title-left">
+                <span class="section-badge">04</span>
+                <span>Software & Utilities</span>
+            </div>
+            <span class="section-count">9 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
@@ -881,14 +344,17 @@
             <div class="card">
                 <span class="category-tag">Software</span>
                 <h3>Nsane Forums</h3>
-                <a href="https://www.nsaneforums.com" class="url" target="_blank" rel="noopener noreferrer">nsaneforums.com</a>
+                <a href="https://www.nsaneforums.com" class="url" target="_blank"
+                    rel="noopener noreferrer">nsaneforums.com</a>
                 <p>Active forum with software updates, patches, and discussions.</p>
-                <a href="https://www.nsaneforums.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://www.nsaneforums.com" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Software</span>
                 <h3>PortableApps</h3>
-                <a href="https://portableapps.com" class="url" target="_blank" rel="noopener noreferrer">portableapps.com</a>
+                <a href="https://portableapps.com" class="url" target="_blank"
+                    rel="noopener noreferrer">portableapps.com</a>
                 <p>Free portable software that runs from a USB drive. No installation needed.</p>
                 <a href="https://portableapps.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
@@ -899,25 +365,55 @@
                 <p>Free software reviews, news, and downloads. Long-running trusted source.</p>
                 <a href="https://www.ghacks.net" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
+            <div class="card">
+                <span class="category-tag">Software / Installer</span>
+                <h3>Ninite</h3>
+                <a href="https://ninite.com" class="url" target="_blank" rel="noopener noreferrer">ninite.com</a>
+                <p>Pick your apps, get one installer that sets them all up with no toolbars or junk. Free for personal
+                    use.</p>
+                <a href="https://ninite.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Software / Freeware</span>
+                <h3>FossHub</h3>
+                <a href="https://fosshub.com" class="url" target="_blank" rel="noopener noreferrer">fosshub.com</a>
+                <p>Clean download mirror for free and open-source software. No bundles, no fake buttons.</p>
+                <a href="https://fosshub.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Software / Discovery</span>
+                <h3>AlternativeTo</h3>
+                <a href="https://alternativeto.net" class="url" target="_blank"
+                    rel="noopener noreferrer">alternativeto.net</a>
+                <p>Find free and open-source alternatives to any paid program. Filter by license and platform.</p>
+                <a href="https://alternativeto.net" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Software / Activation</span>
+                <h3>Microsoft Activation Scripts</h3>
+                <a href="https://massgrave.dev" class="url" target="_blank" rel="noopener noreferrer">massgrave.dev</a>
+                <p>Open-source Windows/Office activation methods. Community-trusted, hosted on GitHub.</p>
+                <a href="https://massgrave.dev" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
         </div>
 
         <div id="games" class="section-title">
-            <span>05</span> Games
+            <div class="section-title-left">
+                <span class="section-badge">05</span>
+                <span>Games & Emulation</span>
+            </div>
+            <span class="section-count">6 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
                 <span class="category-tag">Games</span>
-                <h3>IGG Games</h3>
-                <a href="https://igg-games.com" class="url" target="_blank" rel="noopener noreferrer">igg-games.com</a>
-                <p>Direct download PC games, often pre-cracked. Be cautious of ads.</p>
-                <a href="https://igg-games.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
-            </div>
-            <div class="card">
-                <span class="category-tag">Games</span>
                 <h3>FreeGOGPCGames</h3>
-                <a href="https://freegogpcgames.com" class="url" target="_blank" rel="noopener noreferrer">freegogpcgames.com</a>
+                <a href="https://freegogpcgames.com" class="url" target="_blank"
+                    rel="noopener noreferrer">freegogpcgames.com</a>
                 <p>GOG game backups, DRM-free, direct links.</p>
-                <a href="https://freegogpcgames.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://freegogpcgames.com" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Games</span>
@@ -930,13 +426,44 @@
                 <span class="category-tag">Games</span>
                 <h3>SteamRIP</h3>
                 <a href="https://steamrip.com" class="url" target="_blank" rel="noopener noreferrer">steamrip.com</a>
-                <p>Pre-installed Steam games, no torrents required. Direct download.</p>
+                <p>Pre-installed Steam games, no torrents required. Direct download. Only trust steamrip.com — clones
+                    exist.</p>
                 <a href="https://steamrip.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Games / Forum</span>
+                <h3>CS.RIN.RU</h3>
+                <a href="https://cs.rin.ru" class="url" target="_blank" rel="noopener noreferrer">cs.rin.ru</a>
+                <p>The oldest Steam underground community. Patches, cracks, and game uploads since the mid-2000s. Free
+                    registration.</p>
+                <a href="https://cs.rin.ru" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Games / Abandonware</span>
+                <h3>MyAbandonware</h3>
+                <a href="https://www.myabandonware.com" class="url" target="_blank"
+                    rel="noopener noreferrer">myabandonware.com</a>
+                <p>Thousands of classic games from the 80s and 90s, free to download and play. Clean and ad-light.</p>
+                <a href="https://www.myabandonware.com" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Games / Indie</span>
+                <h3>itch.io</h3>
+                <a href="https://itch.io/games/free" class="url" target="_blank"
+                    rel="noopener noreferrer">itch.io/games/free</a>
+                <p>Massive indie game marketplace with a huge free section. Safe, legal, and supports developers.</p>
+                <a href="https://itch.io/games/free" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
         </div>
 
         <div id="books" class="section-title">
-            <span>06</span> Books & Articles
+            <div class="section-title-left">
+                <span class="section-badge">06</span>
+                <span>Books & Research</span>
+            </div>
+            <span class="section-count">9 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
@@ -949,9 +476,11 @@
             <div class="card">
                 <span class="category-tag">Books</span>
                 <h3>Anna's Archive</h3>
-                <a href="https://annas-archive.org" class="url" target="_blank" rel="noopener noreferrer">annas-archive.org</a>
+                <a href="https://annas-archive.org" class="url" target="_blank"
+                    rel="noopener noreferrer">annas-archive.org</a>
                 <p>Search across LibGen, Sci-Hub, Z-Library, and more. Largest book piracy index.</p>
-                <a href="https://annas-archive.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://annas-archive.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Books</span>
@@ -968,77 +497,160 @@
                 <a href="https://1lib.dev" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Books</span>
-                <h3>LibGen</h3>
-                <a href="https://libgen.is" class="url" target="_blank" rel="noopener noreferrer">libgen.is</a>
-                <p>Huge scientific and general book collection. Multiple mirrors available.</p>
-                <a href="https://libgen.is" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Books / Papers</span>
+                <h3>Sci-Hub</h3>
+                <a href="https://sci-hub.se" class="url" target="_blank" rel="noopener noreferrer">sci-hub.se</a>
+                <p>Paywalled research papers, free. Enter a DOI or URL. Official domains: sci-hub.se, .st, .ru.</p>
+                <a href="https://sci-hub.se" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Books / Legal</span>
+                <h3>Project Gutenberg</h3>
+                <a href="https://www.gutenberg.org" class="url" target="_blank"
+                    rel="noopener noreferrer">gutenberg.org</a>
+                <p>Over 70,000 public domain books, completely free and legal. EPUB, Kindle, plain text.</p>
+                <a href="https://www.gutenberg.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Books / Legal</span>
+                <h3>Standard Ebooks</h3>
+                <a href="https://standardebooks.org" class="url" target="_blank"
+                    rel="noopener noreferrer">standardebooks.org</a>
+                <p>Beautifully formatted, carefully proofread public domain ebooks. Free and open source.</p>
+                <a href="https://standardebooks.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Books / Legal</span>
+                <h3>Open Library</h3>
+                <a href="https://openlibrary.org" class="url" target="_blank"
+                    rel="noopener noreferrer">openlibrary.org</a>
+                <p>Internet Archive project: borrow millions of books free with a free account.</p>
+                <a href="https://openlibrary.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Audiobooks / Legal</span>
+                <h3>LibriVox</h3>
+                <a href="https://librivox.org" class="url" target="_blank" rel="noopener noreferrer">librivox.org</a>
+                <p>Free public domain audiobooks read by volunteers. No account, no cost, everything downloadable.</p>
+                <a href="https://librivox.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
         </div>
 
         <div id="anime" class="section-title">
-            <span>07</span> Anime
+            <div class="section-title-left">
+                <span class="section-badge">07</span>
+                <span>Anime & Manga</span>
+            </div>
+            <span class="section-count">6 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
                 <span class="category-tag">Anime</span>
                 <h3>Nyaa</h3>
                 <a href="https://nyaa.si" class="url" target="_blank" rel="noopener noreferrer">nyaa.si</a>
-                <p>Torrent index for anime, manga, and live action. The standard.</p>
+                <p>The go-to anime torrent index. Raw and subbed/dubbed releases, plus manga and live action.</p>
                 <a href="https://nyaa.si" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Anime Streaming</span>
-                <h3>9anime</h3>
-                <a href="https://9anime.to" class="url" target="_blank" rel="noopener noreferrer">9anime.to</a>
-                <p>High-quality anime streams with English subtitles.</p>
-                <a href="https://9anime.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <h3>AnimePahe</h3>
+                <a href="https://animepahe.si" class="url" target="_blank" rel="noopener noreferrer">animepahe.si</a>
+                <p>Long-running anime streaming, small file sizes, active since 2008. Only trust .si / .com / .org
+                    domains.</p>
+                <a href="https://animepahe.si" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Anime Streaming</span>
-                <h3>Aniwatch</h3>
-                <a href="https://aniwatch.to" class="url" target="_blank" rel="noopener noreferrer">aniwatch.to</a>
-                <p>Ad-free anime streaming with a modern interface.</p>
-                <a href="https://aniwatch.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Anime / Legal</span>
+                <h3>RetroCrush</h3>
+                <a href="https://www.retrocrush.tv" class="url" target="_blank"
+                    rel="noopener noreferrer">retrocrush.tv</a>
+                <p>Free and legal classic anime from the 70s-90s. Ad-supported, no account needed.</p>
+                <a href="https://www.retrocrush.tv" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Anime Streaming</span>
-                <h3>Hianime</h3>
-                <a href="https://hianime.to" class="url" target="_blank" rel="noopener noreferrer">hianime.to</a>
-                <p>Popular anime streaming with large library and fast servers.</p>
-                <a href="https://hianime.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Anime / Legal</span>
+                <h3>Muse Asia</h3>
+                <a href="https://www.youtube.com/@MuseAsia" class="url" target="_blank"
+                    rel="noopener noreferrer">youtube.com/@MuseAsia</a>
+                <p>Licensed current-season simulcasts on YouTube, free with subs. Also check sister channel Ani-One
+                    Asia.</p>
+                <a href="https://www.youtube.com/@MuseAsia" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Anime</span>
-                <h3>Nyaa</h3>
-                <a href="https://nyaa.si" class="url" target="_blank" rel="noopener noreferrer">nyaa.si</a>
-                <p>Torrent index for anime, manga, and live action. The standard.</p>
-                <a href="https://nyaa.si" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Manga</span>
+                <h3>MangaDex</h3>
+                <a href="https://mangadex.org" class="url" target="_blank" rel="noopener noreferrer">mangadex.org</a>
+                <p>The community manga reader. Scanlation groups upload directly, no ads, open source.</p>
+                <a href="https://mangadex.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Light Novels</span>
+                <h3>Novel Updates</h3>
+                <a href="https://www.novelupdates.com" class="url" target="_blank"
+                    rel="noopener noreferrer">novelupdates.com</a>
+                <p>Index of translated Asian light novels and web novels, linking to translator sites. Free
+                    registration.</p>
+                <a href="https://www.novelupdates.com" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
         </div>
 
         <div id="music" class="section-title">
-            <span>08</span> Music
+            <div class="section-title-left">
+                <span class="section-badge">08</span>
+                <span>Music & Audio</span>
+            </div>
+            <span class="section-count">7 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
                 <span class="category-tag">Music</span>
                 <h3>Soulseek</h3>
                 <a href="https://slsknet.org" class="url" target="_blank" rel="noopener noreferrer">slsknet.org</a>
-                <p>Peer-to-peer file sharing for music. Download the client.</p>
+                <p>Peer-to-peer file sharing for music. The best source for rare and out-of-print tracks.</p>
                 <a href="https://slsknet.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
-                <span class="category-tag">Music</span>
-                <h3>Deemix</h3>
-                <a href="https://deemix.app" class="url" target="_blank" rel="noopener noreferrer">deemix.app</a>
-                <p>Download FLAC/MP3 from Deezer. Requires a Deezer account.</p>
-                <a href="https://deemix.app" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <span class="category-tag">Music / Client</span>
+                <h3>Nicotine+</h3>
+                <a href="https://nicotine-plus.org" class="url" target="_blank"
+                    rel="noopener noreferrer">nicotine-plus.org</a>
+                <p>Modern open-source Soulseek client. Lightweight, actively maintained, no ads.</p>
+                <a href="https://nicotine-plus.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Music / Legal</span>
+                <h3>Free Music Archive</h3>
+                <a href="https://freemusicarchive.org" class="url" target="_blank"
+                    rel="noopener noreferrer">freemusicarchive.org</a>
+                <p>Curated free and legal music downloads across every genre. Great for creators too.</p>
+                <a href="https://freemusicarchive.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Music / Legal</span>
+                <h3>Musopen</h3>
+                <a href="https://musopen.org" class="url" target="_blank" rel="noopener noreferrer">musopen.org</a>
+                <p>Royalty-free classical recordings and sheet music. Free tier includes full downloads.</p>
+                <a href="https://musopen.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Music / Radio</span>
+                <h3>Radio Garden</h3>
+                <a href="https://radio.garden" class="url" target="_blank" rel="noopener noreferrer">radio.garden</a>
+                <p>Spin the globe and stream thousands of live radio stations worldwide. Free, no account.</p>
+                <a href="https://radio.garden" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Music</span>
                 <h3>SoundCloud</h3>
-                <a href="https://soundcloud.com" class="url" target="_blank" rel="noopener noreferrer">soundcloud.com</a>
+                <a href="https://soundcloud.com" class="url" target="_blank"
+                    rel="noopener noreferrer">soundcloud.com</a>
                 <p>Free music streaming and downloads from independent artists. Huge library.</p>
                 <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
@@ -1046,13 +658,17 @@
                 <span class="category-tag">Music</span>
                 <h3>Bandcamp</h3>
                 <a href="https://bandcamp.com" class="url" target="_blank" rel="noopener noreferrer">bandcamp.com</a>
-                <p>Support independent artists. Free streaming, many free downloads available.</p>
+                <p>Support independent artists. Free streaming, many free/name-your-price downloads available.</p>
                 <a href="https://bandcamp.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
         </div>
 
         <div id="tools" class="section-title">
-            <span>09</span> Essential Tools & VPNs
+            <div class="section-title-left">
+                <span class="section-badge">09</span>
+                <span>Essential Tools & Privacy</span>
+            </div>
+            <span class="section-count">12 DIRECTORIES</span>
         </div>
         <div class="grid">
             <div class="card">
@@ -1072,37 +688,45 @@
             <div class="card">
                 <span class="category-tag">Download Manager</span>
                 <h3>JDownloader</h3>
-                <a href="https://jdownloader.org" class="url" target="_blank" rel="noopener noreferrer">jdownloader.org</a>
+                <a href="https://jdownloader.org" class="url" target="_blank"
+                    rel="noopener noreferrer">jdownloader.org</a>
                 <p>Open-source download manager for DDL sites, supports captchas, auto-extract.</p>
                 <a href="https://jdownloader.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Torrent Client</span>
                 <h3>qBittorrent</h3>
-                <a href="https://www.qbittorrent.org" class="url" target="_blank" rel="noopener noreferrer">qbittorrent.org</a>
+                <a href="https://www.qbittorrent.org" class="url" target="_blank"
+                    rel="noopener noreferrer">qbittorrent.org</a>
                 <p>Free and open-source torrent client, no ads, built-in search.</p>
-                <a href="https://www.qbittorrent.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://www.qbittorrent.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Ad Blocker</span>
                 <h3>uBlock Origin</h3>
-                <a href="https://ublockorigin.com" class="url" target="_blank" rel="noopener noreferrer">ublockorigin.com</a>
+                <a href="https://ublockorigin.com" class="url" target="_blank"
+                    rel="noopener noreferrer">ublockorigin.com</a>
                 <p>Free, open-source ad blocker. Essential for safe browsing on index sites.</p>
                 <a href="https://ublockorigin.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Privacy</span>
                 <h3>Privacy Guides</h3>
-                <a href="https://privacyguides.org" class="url" target="_blank" rel="noopener noreferrer">privacyguides.org</a>
+                <a href="https://privacyguides.org" class="url" target="_blank"
+                    rel="noopener noreferrer">privacyguides.org</a>
                 <p>Comprehensive guide to online privacy, security, and anonymity tools.</p>
-                <a href="https://privacyguides.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://privacyguides.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">Browser</span>
                 <h3>Firefox</h3>
-                <a href="https://www.mozilla.org/firefox" class="url" target="_blank" rel="noopener noreferrer">mozilla.org/firefox</a>
+                <a href="https://www.mozilla.org/firefox" class="url" target="_blank"
+                    rel="noopener noreferrer">mozilla.org/firefox</a>
                 <p>Open-source browser with strong privacy features and extensive add-on support.</p>
-                <a href="https://www.mozilla.org/firefox" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+                <a href="https://www.mozilla.org/firefox" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
             </div>
             <div class="card">
                 <span class="category-tag">File Sharing</span>
@@ -1111,192 +735,53 @@
                 <p>Free temporary file hosting with one-time download links. No signup needed.</p>
                 <a href="https://www.file.io" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
             </div>
+            <div class="card">
+                <span class="category-tag">Directory</span>
+                <h3>FMHY</h3>
+                <a href="https://fmhy.net" class="url" target="_blank" rel="noopener noreferrer">fmhy.net</a>
+                <p>The largest and most trusted index of everything on this list and more. Community-maintained,
+                    constantly updated.</p>
+                <a href="https://fmhy.net" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Security</span>
+                <h3>VirusTotal</h3>
+                <a href="https://www.virustotal.com" class="url" target="_blank"
+                    rel="noopener noreferrer">virustotal.com</a>
+                <p>Scan any file or URL with 70+ antivirus engines before you run it. Free. Use it on every download.
+                </p>
+                <a href="https://www.virustotal.com" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Downloader</span>
+                <h3>Cobalt</h3>
+                <a href="https://cobalt.tools" class="url" target="_blank" rel="noopener noreferrer">cobalt.tools</a>
+                <p>Paste a link from YouTube, SoundCloud, etc., get the file. Open source, no ads, no account.</p>
+                <a href="https://cobalt.tools" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Privacy</span>
+                <h3>Tor Browser</h3>
+                <a href="https://www.torproject.org" class="url" target="_blank"
+                    rel="noopener noreferrer">torproject.org</a>
+                <p>Free anonymous browsing. Access blocked sites and onion mirrors of many indexes listed here.</p>
+                <a href="https://www.torproject.org" target="_blank" rel="noopener noreferrer"
+                    class="visit-btn">VISIT</a>
+            </div>
         </div>
 
     </main>
 
     <footer class="footer" id="about">
+        <div class="footer-content">
+            <p class="footer-copyright">M O O N A G E - copyright 44tl - MIT</p>
+        </div>
     </footer>
 
-    <button id="back-to-top" class="brutal-btn" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: none;" aria-label="Back to top">TOP</button>
+    <button id="back-to-top" aria-label="Back to top">GO BACK TO TOP</button>
 
-    <script>
-        (function() {
-            const searchInput = document.querySelector('.search-container input');
-            const searchButton = document.querySelector('.search-container button');
-            const cards = document.querySelectorAll('.card');
-            const sections = document.querySelectorAll('.section-title');
-            const backToTop = document.getElementById('back-to-top');
-            const siteCountEl = document.getElementById('site-count');
-            if (siteCountEl) {
-                siteCountEl.textContent = cards.length + ' sites indexed';
-            }
-
-            function normalizeText(text) {
-                return text.toLowerCase().replace(/[^a-z0-9]/g, '');
-            }
-
-            function highlightText(text, query) {
-                if (!query) return text;
-                const regex = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-                return text.replace(regex, '<mark style="background: var(--yellow); padding: 0 2px;">$1</mark>');
-            }
-
-            function performSearch() {
-                const query = searchInput.value.trim();
-                let visibleCount = 0;
-
-                cards.forEach(card => {
-                    const title = card.querySelector('h3')?.textContent || '';
-                    const description = card.querySelector('p')?.textContent || '';
-                    const category = card.querySelector('.category-tag')?.textContent || '';
-                    const url = card.querySelector('.url')?.textContent || '';
-
-                    const searchText = normalizeText(title + ' ' + description + ' ' + category + ' ' + url);
-                    const normalizedQuery = normalizeText(query);
-
-                    if (normalizedQuery === '' || searchText.includes(normalizedQuery)) {
-                        card.style.display = '';
-                        visibleCount++;
-                        if (query) {
-                            const titleEl = card.querySelector('h3');
-                            const descEl = card.querySelector('p');
-                            const catEl = card.querySelector('.category-tag');
-                            const urlEl = card.querySelector('.url');
-                            if (titleEl) titleEl.innerHTML = highlightText(title, query);
-                            if (descEl) descEl.innerHTML = highlightText(description, query);
-                            if (catEl) catEl.innerHTML = highlightText(category, query);
-                            if (urlEl) urlEl.innerHTML = highlightText(url, query);
-                        }
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                sections.forEach(section => {
-                    const sectionId = section.id;
-                    const sectionCards = document.querySelectorAll('.card');
-                    let hasVisible = false;
-                    sectionCards.forEach(card => {
-                        if (card.style.display !== 'none') {
-                            const cardParent = card.parentElement;
-                            if (cardParent && cardParent.contains(section)) {
-                                hasVisible = true;
-                            }
-                        }
-                    });
-                    section.style.display = hasVisible || !query ? '' : 'none';
-                });
-
-                if (query && visibleCount === 0) {
-                    const noResults = document.createElement('div');
-                    noResults.className = 'no-results';
-                    noResults.style.cssText = 'text-align: center; padding: 3rem; font-size: 1.5rem; font-weight: 900; text-transform: uppercase;';
-                    noResults.textContent = 'No results found for "' + query + '"';
-                    const existingNoResults = document.querySelector('.no-results');
-                    if (existingNoResults) existingNoResults.remove();
-                    const content = document.querySelector('.content');
-                    const firstSection = content.querySelector('.section-title');
-                    if (firstSection && !document.querySelector('.no-results')) {
-                        content.insertBefore(noResults, firstSection);
-                    }
-                } else {
-                    const existingNoResults = document.querySelector('.no-results');
-                    if (existingNoResults) existingNoResults.remove();
-                }
-            }
-
-            searchButton.addEventListener('click', performSearch);
-            searchInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-            searchInput.addEventListener('input', function() {
-                if (this.value === '') {
-                    cards.forEach(card => {
-                        card.style.display = '';
-                        const titleEl = card.querySelector('h3');
-                        const descEl = card.querySelector('p');
-                        const catEl = card.querySelector('.category-tag');
-                        const urlEl = card.querySelector('.url');
-                        if (titleEl && titleEl.innerHTML.includes('<mark')) {
-                            titleEl.textContent = titleEl.textContent;
-                        }
-                        if (descEl && descEl.innerHTML.includes('<mark')) {
-                            descEl.textContent = descEl.textContent;
-                        }
-                        if (catEl && catEl.innerHTML.includes('<mark')) {
-                            catEl.textContent = catEl.textContent;
-                        }
-                        if (urlEl && urlEl.innerHTML.includes('<mark')) {
-                            urlEl.textContent = urlEl.textContent;
-                        }
-                    });
-                    sections.forEach(section => section.style.display = '');
-                    const existingNoResults = document.querySelector('.no-results');
-                    if (existingNoResults) existingNoResults.remove();
-                }
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    searchInput.focus();
-                    searchInput.select();
-                }
-                if (e.key === '/' && document.activeElement !== searchInput && document.activeElement?.tagName !== 'INPUT') {
-                    e.preventDefault();
-                    searchInput.focus();
-                    searchInput.select();
-                }
-            });
-
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 500) {
-                    backToTop.style.display = 'block';
-                } else {
-                    backToTop.style.display = 'none';
-                }
-            });
-
-            backToTop.addEventListener('click', function() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            cards.forEach(card => {
-                const urlEl = card.querySelector('.url');
-                const visitBtn = card.querySelector('.visit-btn');
-                if (urlEl && visitBtn) {
-                    const copyBtn = document.createElement('button');
-                    copyBtn.className = 'copy-btn';
-                    copyBtn.textContent = 'COPY';
-                    copyBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const url = urlEl.textContent;
-                        navigator.clipboard.writeText(url).then(() => {
-                            copyBtn.textContent = 'COPIED!';
-                            copyBtn.classList.add('copied');
-                            setTimeout(() => {
-                                copyBtn.textContent = 'COPY';
-                                copyBtn.classList.remove('copied');
-                            }, 2000);
-                        }).catch(() => {
-                            copyBtn.textContent = 'FAILED';
-                            setTimeout(() => {
-                                copyBtn.textContent = 'COPY';
-                            }, 2000);
-                        });
-                    });
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'card-buttons';
-                    visitBtn.parentNode.insertBefore(wrapper, visitBtn.nextSibling);
-                    wrapper.appendChild(visitBtn);
-                    wrapper.appendChild(copyBtn);
-                }
-            });
-        })();
-    </script>
-
+    <script src="app.js"></script>
 </body>
+
 </html>
