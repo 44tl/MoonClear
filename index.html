@@ -517,7 +517,6 @@
 
     <section class="hero">
         <h1>MEGA INDEX</h1>
-        <p>Official resource directory curated from the r/Piracy Megathread & FMHY. Brutalist, no-nonsense.</p>
         <p id="site-count" style="font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;"></p>
         <div class="search-actions">
             <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" target="_blank" rel="noopener noreferrer" class="brutal-btn primary">REDDIT MEGATHREAD</a>
@@ -883,8 +882,6 @@
     </main>
 
     <footer class="footer" id="about">
-        <p>MoonClear — Brutalist Resource Index. Curated from <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" target="_blank" rel="noopener noreferrer">r/Piracy Megathread</a> & <a href="https://fmhy.net" target="_blank" rel="noopener noreferrer">FMHY</a>.</p>
-        <p class="disclaimer">All links point to official domains as of 2025. Domains may change, always verify via FMHY. This site does not host any copyrighted content. Use at your own risk.</p>
     </footer>
 
     <button id="back-to-top" class="brutal-btn" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: none;" aria-label="Back to top">↑ TOP</button>
@@ -1057,7 +1054,11 @@
                             }, 2000);
                         });
                     });
-                    visitBtn.parentNode.insertBefore(copyBtn, visitBtn.nextSibling);
+                    const wrapper = document.createElement('div');
+                    wrapper.style.cssText = 'display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;';
+                    visitBtn.parentNode.insertBefore(wrapper, visitBtn.nextSibling);
+                    wrapper.appendChild(visitBtn);
+                    wrapper.appendChild(copyBtn);
                 }
             });
         })();
