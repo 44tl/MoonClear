@@ -315,6 +315,8 @@
             transition: var(--transition);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
         }
 
         .card:hover {
@@ -333,6 +335,8 @@
             border: var(--border-thin);
             margin-bottom: 0.8rem;
             width: fit-content;
+            max-width: 100%;
+            overflow-wrap: anywhere;
         }
 
         .card h3 {
@@ -342,6 +346,8 @@
             letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
             word-break: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.2;
         }
 
         .card .url {
@@ -353,8 +359,10 @@
             display: inline-block;
             margin-bottom: 0.8rem;
             word-break: break-all;
+            overflow-wrap: anywhere;
             border-bottom: 2px solid transparent;
             transition: var(--transition);
+            max-width: 100%;
         }
 
         .card .url:hover {
@@ -367,6 +375,9 @@
             color: var(--dark-gray);
             flex-grow: 1;
             margin-bottom: 1rem;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.5;
         }
 
         .card .visit-btn {
@@ -418,6 +429,21 @@
         .card .copy-btn.copied {
             background: var(--green);
             color: var(--white);
+        }
+
+        .card-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 0.5rem;
+        }
+
+        .card-buttons .visit-btn,
+        .card-buttons .copy-btn {
+            margin-left: 0;
+            flex-shrink: 0;
         }
 
         .footer {
@@ -1105,7 +1131,7 @@
                         });
                     });
                     const wrapper = document.createElement('div');
-                    wrapper.style.cssText = 'display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;';
+                    wrapper.className = 'card-buttons';
                     visitBtn.parentNode.insertBefore(wrapper, visitBtn.nextSibling);
                     wrapper.appendChild(visitBtn);
                     wrapper.appendChild(copyBtn);
