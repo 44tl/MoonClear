@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoonClear</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --yellow: #ffde00;
+            --red: #ff3b3b;
+            --blue: #1a73e8;
+            --green: #0f9d58;
+            --orange: #ff6d00;
+            --purple: #7c4dff;
+            --gray: #e8e8e8;
+            --dark-gray: #1a1a1a;
+            --border-thick: 4px solid var(--black);
+            --border-thin: 2px solid var(--black);
+            --shadow-brutal: 8px 8px 0px 0px var(--black);
+            --shadow-brutal-sm: 4px 4px 0px 0px var(--black);
+            --shadow-brutal-lg: 12px 12px 0px 0px var(--black);
+            --font-mono: 'Courier New', 'IBM Plex Mono', monospace;
+            --font-sans: 'Arial', 'Helvetica Neue', sans-serif;
+            --transition: all 0.15s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--white);
+            font-family: var(--font-sans);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.5;
+        }
+
+        .google-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: var(--white);
+            border-bottom: var(--border-thick);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 900;
+            font-size: 2rem;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            background: var(--black);
+            color: var(--white);
+            padding: 0.2rem 0.5rem;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .logo svg {
+            width: 2.2rem;
+            height: 2.2rem;
+            fill: var(--black);
+        }
+
+        .logo:hover svg {
+            fill: var(--white);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            min-width: 200px;
+            display: flex;
+            border: var(--border-thick);
+            background: var(--white);
+            box-shadow: var(--shadow-brutal-sm);
+            transition: var(--transition);
+        }
+
+        .search-container:focus-within {
+            box-shadow: var(--shadow-brutal);
+            transform: translate(-2px, -2px);
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            font-family: var(--font-mono);
+            background: transparent;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .search-container button {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 0 1.5rem;
+            font-weight: 700;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: var(--transition);
+        }
+
+        .search-container button:hover {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        .top-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-links a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            padding: 0.3rem 0.6rem;
+            border: var(--border-thin);
+            background: var(--white);
+            transition: var(--transition);
+        }
+
+        .top-links a:hover {
+            background: var(--yellow);
+            box-shadow: var(--shadow-brutal-sm);
+            transform: translate(-2px, -2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--white);
+            border-bottom: var(--border-thick);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--dark-gray);
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .brutal-btn {
+            background: var(--white);
+            border: var(--border-thick);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            box-shadow: var(--shadow-brutal-sm);
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--black);
+            display: inline-block;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        .brutal-btn:hover {
+            box-shadow: var(--shadow-brutal);
+            transform: translate(-3px, -3px);
+            background: var(--yellow);
+        }
+
+        .brutal-btn.primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .brutal-btn.primary:hover {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        .main-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--gray);
+            border-bottom: var(--border-thick);
+            justify-content: center;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border: var(--border-thin);
+            background: var(--white);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            transition: var(--transition);
+        }
+
+        .main-nav a:hover {
+            background: var(--blue);
+            color: var(--white);
+            box-shadow: var(--shadow-brutal-sm);
+            transform: translate(-2px, -2px);
+        }
+
+        .content {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            border-bottom: var(--border-thick);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title span {
+            background: var(--black);
+            color: var(--white);
+            padding: 0.2rem 0.6rem;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: var(--white);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-brutal);
+            padding: 1.5rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: var(--shadow-brutal-lg);
+        }
+
+        .card .category-tag {
+            display: inline-block;
+            background: var(--yellow);
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: var(--border-thin);
+            margin-bottom: 0.8rem;
+            width: fit-content;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+
+        .card .url {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--blue);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+            word-break: break-all;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .card .url:hover {
+            border-bottom: 2px solid var(--blue);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+
+        .card .visit-btn {
+            background: var(--black);
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            text-align: center;
+            border: var(--border-thin);
+            transition: var(--transition);
+            align-self: flex-start;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .card .visit-btn:hover {
+            background: var(--red);
+            box-shadow: var(--shadow-brutal-sm);
+            transform: translate(-2px, -2px);
+        }
+
+        .card .copy-btn {
+            background: var(--white);
+            color: var(--black);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            text-align: center;
+            border: var(--border-thin);
+            transition: var(--transition);
+            align-self: flex-start;
+            cursor: pointer;
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+
+        .card .copy-btn:hover {
+            background: var(--green);
+            color: var(--white);
+            box-shadow: var(--shadow-brutal-sm);
+            transform: translate(-2px, -2px);
+        }
+
+        .card .copy-btn.copied {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+            border-top: var(--border-thick);
+            text-align: center;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .footer a {
+            color: var(--yellow);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer {
+            max-width: 800px;
+            margin: 1rem auto 0;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            .google-bar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1rem;
+            }
+            .search-container {
+                max-width: 100%;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            #back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem !important;
+                font-size: 0.8rem !important;
+            }
+        }
+
+        .no-results {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        mark {
+            background: var(--yellow);
+            padding: 0 2px;
+        }
+
+        .card.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="google-bar">
+        <a href="#" class="logo">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            MoonClear
+        </a>
+        <div class="search-container">
+            <input type="text" placeholder="Search MoonClear index..." aria-label="Search">
+            <button type="button">SEARCH</button>
+        </div>
+        <div class="top-links">
+            <a href="#torrents">Torrents</a>
+            <a href="#streaming">Streaming</a>
+            <a href="#direct">Direct</a>
+            <a href="#software">Software</a>
+            <a href="#books">Books</a>
+            <a href="#about">About</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>MEGA INDEX</h1>
+        <p>Official resource directory curated from the r/Piracy Megathread & FMHY. Brutalist, no-nonsense.</p>
+        <p id="site-count" style="font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em;"></p>
+        <div class="search-actions">
+            <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" target="_blank" rel="noopener noreferrer" class="brutal-btn primary">REDDIT MEGATHREAD</a>
+            <a href="https://fmhy.net" target="_blank" rel="noopener noreferrer" class="brutal-btn">FMHY SITE</a>
+        </div>
+    </section>
+
+    <nav class="main-nav">
+        <a href="#torrents">Torrents</a>
+        <a href="#streaming">Streaming</a>
+        <a href="#direct-download">Direct Download</a>
+        <a href="#software">Software</a>
+        <a href="#games">Games</a>
+        <a href="#books">Books</a>
+        <a href="#anime">Anime</a>
+        <a href="#music">Music</a>
+        <a href="#tools">Tools</a>
+        <a href="#general">General</a>
+    </nav>
+
+    <main class="content">
+
+        <div id="torrents" class="section-title">
+            <span>01</span> Torrents & Tracker Indexes
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Torrents</span>
+                <h3>The Pirate Bay</h3>
+                <a href="https://thepiratebay.org" class="url" target="_blank" rel="noopener noreferrer">thepiratebay.org</a>
+                <p>The most resilient torrent index. Official domain, but may require mirrors. Use official proxies listed on their site.</p>
+                <a href="https://thepiratebay.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents</span>
+                <h3>1337x</h3>
+                <a href="https://1337x.to" class="url" target="_blank" rel="noopener noreferrer">1337x.to</a>
+                <p>Well-moderated community with verified uploaders. Clean interface, solid magnet links.</p>
+                <a href="https://1337x.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents</span>
+                <h3>RARBG</h3>
+                <a href="https://rarbg.to" class="url" target="_blank" rel="noopener noreferrer">rarbg.to</a>
+                <p>High-quality movie and TV releases. Often blocked by ISPs, use VPN or mirrors listed on FMHY.</p>
+                <a href="https://rarbg.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents</span>
+                <h3>TorrentGalaxy</h3>
+                <a href="https://torrentgalaxy.to" class="url" target="_blank" rel="noopener noreferrer">torrentgalaxy.to</a>
+                <p>Modern torrent site with wide variety and active community.</p>
+                <a href="https://torrentgalaxy.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents / Movies</span>
+                <h3>YTS</h3>
+                <a href="https://yts.mx" class="url" target="_blank" rel="noopener noreferrer">yts.mx</a>
+                <p>Small-size HD movie rips in 720p/1080p. Official domain yts.mx (beware of clones).</p>
+                <a href="https://yts.mx" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents / TV</span>
+                <h3>EZTV</h3>
+                <a href="https://eztv.re" class="url" target="_blank" rel="noopener noreferrer">eztv.re</a>
+                <p>TV show torrents, active uploads. Official domain eztv.re.</p>
+                <a href="https://eztv.re" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents / Anime</span>
+                <h3>Nyaa</h3>
+                <a href="https://nyaa.si" class="url" target="_blank" rel="noopener noreferrer">nyaa.si</a>
+                <p>The go-to anime torrent index. Includes raw and subbed/dubbed releases.</p>
+                <a href="https://nyaa.si" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrents / Russian</span>
+                <h3>RuTracker</h3>
+                <a href="https://rutracker.org" class="url" target="_blank" rel="noopener noreferrer">rutracker.org</a>
+                <p>Massive Russian torrent community. English interface available. Requires registration.</p>
+                <a href="https://rutracker.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="streaming" class="section-title">
+            <span>02</span> Streaming Sites (Movies/TV)
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Streaming</span>
+                <h3>FMovies</h3>
+                <a href="https://fmovies.to" class="url" target="_blank" rel="noopener noreferrer">fmovies.to</a>
+                <p>Large library with HD streams. Official domain may change; check FMHY for current mirror.</p>
+                <a href="https://fmovies.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Streaming</span>
+                <h3>Soap2Day</h3>
+                <a href="https://soap2day.to" class="url" target="_blank" rel="noopener noreferrer">soap2day.to</a>
+                <p>Clean UI, no ads, multiple servers. Official domain soap2day.to.</p>
+                <a href="https://soap2day.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Streaming</span>
+                <h3>LookMovie</h3>
+                <a href="https://lookmovie2.to" class="url" target="_blank" rel="noopener noreferrer">lookmovie2.to</a>
+                <p>High-quality 1080p streams with minimal ads.</p>
+                <a href="https://lookmovie2.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Streaming</span>
+                <h3>Cineb</h3>
+                <a href="https://cineb.net" class="url" target="_blank" rel="noopener noreferrer">cineb.net</a>
+                <p>Netflix-like interface, fast streams.</p>
+                <a href="https://cineb.net" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Streaming / Anime</span>
+                <h3>9anime</h3>
+                <a href="https://9anime.to" class="url" target="_blank" rel="noopener noreferrer">9anime.to</a>
+                <p>Anime streaming with English subs. Official domain 9anime.to (may redirect).</p>
+                <a href="https://9anime.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Streaming / Anime</span>
+                <h3>Aniwatch</h3>
+                <a href="https://aniwatch.to" class="url" target="_blank" rel="noopener noreferrer">aniwatch.to</a>
+                <p>Modern anime streaming with high quality and no ads.</p>
+                <a href="https://aniwatch.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="direct-download" class="section-title">
+            <span>03</span> Direct Download (DDL)
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">DDL / Games</span>
+                <h3>FitGirl Repacks</h3>
+                <a href="https://fitgirl-repacks.site" class="url" target="_blank" rel="noopener noreferrer">fitgirl-repacks.site</a>
+                <p>Highly compressed game repacks. Official site, no ads, trusted repacker.</p>
+                <a href="https://fitgirl-repacks.site" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">DDL / Games</span>
+                <h3>DODI Repacks</h3>
+                <a href="https://dodi-repacks.site" class="url" target="_blank" rel="noopener noreferrer">dodi-repacks.site</a>
+                <p>Another reliable repacker with faster installs, direct links.</p>
+                <a href="https://dodi-repacks.site" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">DDL / Games</span>
+                <h3>SteamRIP</h3>
+                <a href="https://steamrip.com" class="url" target="_blank" rel="noopener noreferrer">steamrip.com</a>
+                <p>Direct download Steam games pre-installed. No torrents.</p>
+                <a href="https://steamrip.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">DDL / Games</span>
+                <h3>GOG Games</h3>
+                <a href="https://gog-games.com" class="url" target="_blank" rel="noopener noreferrer">gog-games.com</a>
+                <p>DRM-free GOG game backups. Official community mirror.</p>
+                <a href="https://gog-games.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">DDL / Software</span>
+                <h3>FileCR</h3>
+                <a href="https://filecr.com" class="url" target="_blank" rel="noopener noreferrer">filecr.com</a>
+                <p>Windows & Mac software direct downloads. Clean interface.</p>
+                <a href="https://filecr.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">DDL / General</span>
+                <h3>SoftArchive (Sanet)</h3>
+                <a href="https://sanet.st" class="url" target="_blank" rel="noopener noreferrer">sanet.st</a>
+                <p>Huge DDL community for software, books, courses.</p>
+                <a href="https://sanet.st" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="software" class="section-title">
+            <span>04</span> Software & Apps
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Software</span>
+                <h3>FileCR</h3>
+                <a href="https://filecr.com" class="url" target="_blank" rel="noopener noreferrer">filecr.com</a>
+                <p>Windows and Mac software, direct download, regularly updated.</p>
+                <a href="https://filecr.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Software</span>
+                <h3>Appnee</h3>
+                <a href="https://appnee.com" class="url" target="_blank" rel="noopener noreferrer">appnee.com</a>
+                <p>Portable and cracked Windows apps, portable versions.</p>
+                <a href="https://appnee.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Software</span>
+                <h3>Nsane Forums</h3>
+                <a href="https://www.nsaneforums.com" class="url" target="_blank" rel="noopener noreferrer">nsaneforums.com</a>
+                <p>Active forum with software updates, patches, and discussions.</p>
+                <a href="https://www.nsaneforums.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="games" class="section-title">
+            <span>05</span> Games
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Games</span>
+                <h3>IGG Games</h3>
+                <a href="https://igg-games.com" class="url" target="_blank" rel="noopener noreferrer">igg-games.com</a>
+                <p>Direct download PC games, often pre-cracked. Be cautious of ads.</p>
+                <a href="https://igg-games.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Games</span>
+                <h3>FreeGOGPCGames</h3>
+                <a href="https://freegogpcgames.com" class="url" target="_blank" rel="noopener noreferrer">freegogpcgames.com</a>
+                <p>GOG game backups, DRM-free, direct links.</p>
+                <a href="https://freegogpcgames.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="books" class="section-title">
+            <span>06</span> Books & Articles
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Books</span>
+                <h3>Library Genesis</h3>
+                <a href="https://libgen.is" class="url" target="_blank" rel="noopener noreferrer">libgen.is</a>
+                <p>Millions of books and articles. Official mirrors: libgen.rs, libgen.st, libgen.gs.</p>
+                <a href="https://libgen.is" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Books</span>
+                <h3>Anna's Archive</h3>
+                <a href="https://annas-archive.org" class="url" target="_blank" rel="noopener noreferrer">annas-archive.org</a>
+                <p>Search across LibGen, Sci-Hub, Z-Library, and more. Largest book piracy index.</p>
+                <a href="https://annas-archive.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Books</span>
+                <h3>Z-Library</h3>
+                <a href="https://z-lib.org" class="url" target="_blank" rel="noopener noreferrer">z-lib.org</a>
+                <p>Large ebook library. Official domain may change, check Anna's Archive for current.</p>
+                <a href="https://z-lib.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="anime" class="section-title">
+            <span>07</span> Anime
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Anime</span>
+                <h3>Nyaa</h3>
+                <a href="https://nyaa.si" class="url" target="_blank" rel="noopener noreferrer">nyaa.si</a>
+                <p>Torrent index for anime, manga, and live action. The standard.</p>
+                <a href="https://nyaa.si" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Anime Streaming</span>
+                <h3>9anime</h3>
+                <a href="https://9anime.to" class="url" target="_blank" rel="noopener noreferrer">9anime.to</a>
+                <p>High-quality anime streams with English subtitles.</p>
+                <a href="https://9anime.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Anime Streaming</span>
+                <h3>Aniwatch</h3>
+                <a href="https://aniwatch.to" class="url" target="_blank" rel="noopener noreferrer">aniwatch.to</a>
+                <p>Ad-free anime streaming with a modern interface.</p>
+                <a href="https://aniwatch.to" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="music" class="section-title">
+            <span>08</span> Music
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Music</span>
+                <h3>Soulseek</h3>
+                <a href="https://slsknet.org" class="url" target="_blank" rel="noopener noreferrer">slsknet.org</a>
+                <p>Peer-to-peer file sharing for music. Download the client.</p>
+                <a href="https://slsknet.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Music</span>
+                <h3>Deemix</h3>
+                <a href="https://deemix.app" class="url" target="_blank" rel="noopener noreferrer">deemix.app</a>
+                <p>Download FLAC/MP3 from Deezer. Requires a Deezer account.</p>
+                <a href="https://deemix.app" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="tools" class="section-title">
+            <span>09</span> Essential Tools & VPNs
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">VPN</span>
+                <h3>Mullvad VPN</h3>
+                <a href="https://mullvad.net" class="url" target="_blank" rel="noopener noreferrer">mullvad.net</a>
+                <p>Privacy-focused VPN with no logs, cash payments accepted. Official site.</p>
+                <a href="https://mullvad.net" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">VPN</span>
+                <h3>ProtonVPN</h3>
+                <a href="https://protonvpn.com" class="url" target="_blank" rel="noopener noreferrer">protonvpn.com</a>
+                <p>Free tier available, strong privacy, based in Switzerland.</p>
+                <a href="https://protonvpn.com" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Download Manager</span>
+                <h3>JDownloader</h3>
+                <a href="https://jdownloader.org" class="url" target="_blank" rel="noopener noreferrer">jdownloader.org</a>
+                <p>Open-source download manager for DDL sites, supports captchas, auto-extract.</p>
+                <a href="https://jdownloader.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Torrent Client</span>
+                <h3>qBittorrent</h3>
+                <a href="https://www.qbittorrent.org" class="url" target="_blank" rel="noopener noreferrer">qbittorrent.org</a>
+                <p>Free and open-source torrent client, no ads, built-in search.</p>
+                <a href="https://www.qbittorrent.org" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+        <div id="general" class="section-title">
+            <span>10</span> General & Community
+        </div>
+        <div class="grid">
+            <div class="card">
+                <span class="category-tag">Community</span>
+                <h3>r/Piracy</h3>
+                <a href="https://www.reddit.com/r/Piracy/" class="url" target="_blank" rel="noopener noreferrer">reddit.com/r/Piracy</a>
+                <p>The main subreddit with daily discussions and guides.</p>
+                <a href="https://www.reddit.com/r/Piracy/" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Megathread</span>
+                <h3>Piracy Megathread</h3>
+                <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" class="url" target="_blank" rel="noopener noreferrer">reddit.com/r/Piracy/wiki/megathread</a>
+                <p>The definitive wiki listing all trusted sites and tools.</p>
+                <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+            <div class="card">
+                <span class="category-tag">Directory</span>
+                <h3>FMHY (Free Media Heck Yeah)</h3>
+                <a href="https://fmhy.net" class="url" target="_blank" rel="noopener noreferrer">fmhy.net</a>
+                <p>The largest community-driven piracy directory. Updated frequently.</p>
+                <a href="https://fmhy.net" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT</a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer" id="about">
+        <p>MoonClear — Brutalist Resource Index. Curated from <a href="https://www.reddit.com/r/Piracy/wiki/megathread/" target="_blank" rel="noopener noreferrer">r/Piracy Megathread</a> & <a href="https://fmhy.net" target="_blank" rel="noopener noreferrer">FMHY</a>.</p>
+        <p class="disclaimer">All links point to official domains as of 2025. Domains may change, always verify via FMHY. This site does not host any copyrighted content. Use at your own risk.</p>
+    </footer>
+
+    <button id="back-to-top" class="brutal-btn" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: none;" aria-label="Back to top">↑ TOP</button>
+
+    <script>
+        (function() {
+            const searchInput = document.querySelector('.search-container input');
+            const searchButton = document.querySelector('.search-container button');
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.section-title');
+            const backToTop = document.getElementById('back-to-top');
+            const siteCountEl = document.getElementById('site-count');
+            if (siteCountEl) {
+                siteCountEl.textContent = cards.length + ' sites indexed';
+            }
+
+            function normalizeText(text) {
+                return text.toLowerCase().replace(/[^a-z0-9]/g, '');
+            }
+
+            function highlightText(text, query) {
+                if (!query) return text;
+                const regex = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                return text.replace(regex, '<mark style="background: var(--yellow); padding: 0 2px;">$1</mark>');
+            }
+
+            function performSearch() {
+                const query = searchInput.value.trim();
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const title = card.querySelector('h3')?.textContent || '';
+                    const description = card.querySelector('p')?.textContent || '';
+                    const category = card.querySelector('.category-tag')?.textContent || '';
+                    const url = card.querySelector('.url')?.textContent || '';
+
+                    const searchText = normalizeText(title + ' ' + description + ' ' + category + ' ' + url);
+                    const normalizedQuery = normalizeText(query);
+
+                    if (normalizedQuery === '' || searchText.includes(normalizedQuery)) {
+                        card.style.display = '';
+                        visibleCount++;
+                        if (query) {
+                            const titleEl = card.querySelector('h3');
+                            const descEl = card.querySelector('p');
+                            const catEl = card.querySelector('.category-tag');
+                            const urlEl = card.querySelector('.url');
+                            if (titleEl) titleEl.innerHTML = highlightText(title, query);
+                            if (descEl) descEl.innerHTML = highlightText(description, query);
+                            if (catEl) catEl.innerHTML = highlightText(category, query);
+                            if (urlEl) urlEl.innerHTML = highlightText(url, query);
+                        }
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                sections.forEach(section => {
+                    const sectionId = section.id;
+                    const sectionCards = document.querySelectorAll('.card');
+                    let hasVisible = false;
+                    sectionCards.forEach(card => {
+                        if (card.style.display !== 'none') {
+                            const cardParent = card.parentElement;
+                            if (cardParent && cardParent.contains(section)) {
+                                hasVisible = true;
+                            }
+                        }
+                    });
+                    section.style.display = hasVisible || !query ? '' : 'none';
+                });
+
+                if (query && visibleCount === 0) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.style.cssText = 'text-align: center; padding: 3rem; font-size: 1.5rem; font-weight: 900; text-transform: uppercase;';
+                    noResults.textContent = 'No results found for "' + query + '"';
+                    const existingNoResults = document.querySelector('.no-results');
+                    if (existingNoResults) existingNoResults.remove();
+                    const content = document.querySelector('.content');
+                    const firstSection = content.querySelector('.section-title');
+                    if (firstSection && !document.querySelector('.no-results')) {
+                        content.insertBefore(noResults, firstSection);
+                    }
+                } else {
+                    const existingNoResults = document.querySelector('.no-results');
+                    if (existingNoResults) existingNoResults.remove();
+                }
+            }
+
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            searchInput.addEventListener('input', function() {
+                if (this.value === '') {
+                    cards.forEach(card => {
+                        card.style.display = '';
+                        const titleEl = card.querySelector('h3');
+                        const descEl = card.querySelector('p');
+                        const catEl = card.querySelector('.category-tag');
+                        const urlEl = card.querySelector('.url');
+                        if (titleEl && titleEl.innerHTML.includes('<mark')) {
+                            titleEl.textContent = titleEl.textContent;
+                        }
+                        if (descEl && descEl.innerHTML.includes('<mark')) {
+                            descEl.textContent = descEl.textContent;
+                        }
+                        if (catEl && catEl.innerHTML.includes('<mark')) {
+                            catEl.textContent = catEl.textContent;
+                        }
+                        if (urlEl && urlEl.innerHTML.includes('<mark')) {
+                            urlEl.textContent = urlEl.textContent;
+                        }
+                    });
+                    sections.forEach(section => section.style.display = '');
+                    const existingNoResults = document.querySelector('.no-results');
+                    if (existingNoResults) existingNoResults.remove();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+                if (e.key === '/' && document.activeElement !== searchInput && document.activeElement?.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            });
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 500) {
+                    backToTop.style.display = 'block';
+                } else {
+                    backToTop.style.display = 'none';
+                }
+            });
+
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            cards.forEach(card => {
+                const urlEl = card.querySelector('.url');
+                const visitBtn = card.querySelector('.visit-btn');
+                if (urlEl && visitBtn) {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.textContent = 'COPY';
+                    copyBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const url = urlEl.textContent;
+                        navigator.clipboard.writeText(url).then(() => {
+                            copyBtn.textContent = 'COPIED!';
+                            copyBtn.classList.add('copied');
+                            setTimeout(() => {
+                                copyBtn.textContent = 'COPY';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        }).catch(() => {
+                            copyBtn.textContent = 'FAILED';
+                            setTimeout(() => {
+                                copyBtn.textContent = 'COPY';
+                            }, 2000);
+                        });
+                    });
+                    visitBtn.parentNode.insertBefore(copyBtn, visitBtn.nextSibling);
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>
